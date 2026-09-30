@@ -2,6 +2,8 @@
 
 A simple Python and Flask dashboard.
 
+![CVTS Operations Dashboard](src/assets/hero.png)
+
 ## Run locally
 
 ```powershell
@@ -11,7 +13,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Open http://127.0.0.1:5000.
+Open the local address shown in the Flask startup output.
 
 ## File guide
 
@@ -27,13 +29,12 @@ Open http://127.0.0.1:5000.
 The dashboard loads jobs from the Synchroteam list endpoint. Copy `.env.example` to `.env` and set the credentials before starting Flask:
 
 ```powershell
-$env:SYNCHROTEAM_LIST_URL = 'https://cvtitsolutions.synchroteam.com/api/v3/job/list'
+$env:SYNCHROTEAM_LIST_URL = 'YOUR_PRIVATE_JOB_LIST_ENDPOINT'
 $env:SYNCHROTEAM_USERNAME = 'cvtitsolutions'
 $env:SYNCHROTEAM_PASSWORD = 'YOUR_PASSWORD'
 python app.py
 ```
 
-You can filter the list to one job with `http://127.0.0.1:5000/?job_id=YOUR_JOB_ID`.
-The raw response is available at `/api/jobs/YOUR_JOB_ID`.
+You can filter the list to one job by adding a `job_id` query parameter to the dashboard address. The raw response is available from the jobs API route.
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
