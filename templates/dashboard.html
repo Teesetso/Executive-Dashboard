@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CVTS Operations Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/controls.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/customers.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/sites.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/utility.css') }}">
+</head>
+<body>
+  <div class="app-frame">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">C</span><span>CVTS</span></div>
+      <div class="workspace"><span class="avatar">EL</span><span><b>Executive view</b><small>Operations</small></span><span>⌄</span></div>
+      <nav><a class="{% if view == 'overview' %}active{% endif %}" href="{{ url_for('dashboard', view='overview', job_id=job_id, period=period) }}">▣ <span>Overview</span></a><a class="{% if view == 'jobs' %}active{% endif %}" href="{{ url_for('dashboard', view='jobs', job_id=job_id, period=period) }}">▤ <span>Jobs</span></a><a class="{% if view == 'customers' %}active{% endif %}" href="{{ url_for('dashboard', view='customers', job_id=job_id, period=period) }}">◎ <span>Customers</span></a><a class="{% if view == 'sites' %}active{% endif %}" href="{{ url_for('dashboard', view='sites', job_id=job_id, period=period) }}">⌖ <span>Sites</span></a><a class="{% if view == 'reports' %}active{% endif %}" href="{{ url_for('dashboard', view='reports', job_id=job_id, period=period) }}">▥ <span>Reports</span></a></nav>
+      <div class="sidebar-bottom"><a class="{% if view == 'settings' %}active{% endif %}" href="{{ url_for('dashboard', view='settings', job_id=job_id, period=period) }}">⚙ <span>Settings</span></a><a class="{% if view == 'help' %}active{% endif %}" href="{{ url_for('dashboard', view='help', job_id=job_id, period=period) }}">? <span>Help center</span></a><div class="user user-menu-wrap"><span class="avatar mint">VJ</span><span><b>Vanessa Jin</b><small>Administrator</small></span><button class="user-menu-button" data-user-menu-button type="button" aria-label="Open account menu" aria-expanded="false"></button><div class="user-menu" data-user-menu hidden><a href="{{ url_for('dashboard', view='settings', job_id=job_id, period=period) }}">Settings</a><a href="{{ url_for('dashboard', view='help', job_id=job_id, period=period) }}">Help center</a></div></div></div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar"><button class="mobile-menu" data-menu>☰</button><div class="breadcrumbs"><span>Workspace</span><span>/</span><b>{{ views[view] }}</b></div><div class="top-actions"><button class="icon-button" data-search aria-label="Find a job">⌕</button><button class="icon-button notification" data-notifications aria-label="Show notifications">♢<i></i></button><div class="top-avatar">VJ</div></div></header>
+      <div class="dashboard-shell">
+        <div class="page-heading"><div><p class="eyebrow">Monday, September 29, 2026 <span class="live-dot"></span> Live overview</p><h1>Good morning, Vanessa</h1><p class="lede">Here’s what’s happening across your service operations.</p></div><div class="heading-actions"><button class="button secondary" data-filter>☷ Filters</button><button class="button primary" onclick="window.print()">↓ Download report</button></div></div>
+        {% if view != 'customers' %}<form class="job-form" method="get"><label>Synchroteam job ID<input name="job_id" value="{{ job_id }}" placeholder="265_160719144323649" required></label><input type="hidden" name="period" value="{{ period }}"><button class="button primary" type="submit">Load job</button></form>{% endif %}
+        {% if error %}<div class="api-message">{{ error }}</div>{% endif %}
+        {% if view == 'customers' %}{% include 'partials/customers.html' %}{% endif %}
+        {% if view == 'sites' %}{% include 'partials/sites.html' %}{% endif %}
+        {% if view == 'settings' %}{% include 'partials/settings.html' %}{% endif %}
+        {% if view == 'help' %}{% include 'partials/help.html' %}{% endif %}
+        {% if view not in ('customers', 'sites', 'settings', 'help') %}
+        <form class="filter-popover" data-filter-panel method="get"><label>View period<select name="period">{% for item in periods %}<option {% if item == period %}selected{% endif %}>{{ item }}</option>{% endfor %}</select></label><button type="submit">Apply</button></form>
+        <section class="kpi-grid">
+          {% with label='Total jobs', value=jobs|length, detail='vs. 92 last period', trend='+8.4%' %}{% include 'partials/kpi.html' %}{% endwith %}
+          {% with label='Completed jobs', value=completed, detail='of total jobs', trend='+12.2%' %}{% include 'partials/kpi.html' %}{% endwith %}
+          {% with label='On-time rate', value=on_time ~ '%', detail='target is 90%', trend='+2.1%' %}{% include 'partials/kpi.html' %}{% endwith %}
+          {% with label='Paused jobs', value=paused_counts.values()|sum, detail='need attention', trend='-4.5%', negative=true %}{% include 'partials/kpi.html' %}{% endwith %}
+        </section>
+        <div class="section-heading"><div><h2>Operational performance</h2><p>Service delivery at a glance</p></div><form class="period-control" method="get">◷ <select name="period" onchange="this.form.submit()">{% for item in periods %}<option {% if item == period %}selected{% endif %}>{{ item }}</option>{% endfor %}</select>⌄</form></div>
+        <section class="chart-grid">{% with title='Jobs by status', kind='status' %}{% include 'partials/panel.html' %}{% endwith %}{% with title='Workload by technician', kind='technicians' %}{% include 'partials/panel.html' %}{% endwith %}</section>
+        <section class="chart-grid lower">{% with title='Jobs by type', kind='types' %}{% include 'partials/panel.html' %}{% endwith %}{% with title='Paused jobs by customer / site', kind='paused' %}{% include 'partials/panel.html' %}{% endwith %}</section>
+        <section class="table-panel" id="exceptions" data-exceptions><div class="panel-head"><div><h3>Duration exceptions</h3><p>Jobs taking longer than scheduled</p></div><button class="text-button" data-scroll="exceptions" data-detail="Duration exceptions" type="button">View all ↗</button></div><div class="table-scroll"><table><thead><tr><th>Job</th><th>Customer / site</th><th>Technician</th><th>Actual duration</th><th>Scheduled</th><th>Status</th></tr></thead><tbody>{% for job in overdue_jobs %}<tr><td><strong>{{ job.id }}</strong><small>{{ job.type }}</small></td><td><strong>{{ job.customer }}</strong><small>{{ job.site }}</small></td><td>{{ job.technician }}</td><td class="overrun">{{ job.duration }} hrs <span>+{{ '%.1f'|format(job.duration - job.scheduled) }} hrs</span></td><td>{{ job.scheduled }} hrs</td><td><span class="status-chip overdue">Overrun</span></td></tr>{% else %}<tr><td colspan="6">No duration exceptions for this job.</td></tr>{% endfor %}</tbody></table></div></section>
+        {% endif %}<footer><span>CVTS Operations Dashboard <i></i> Data refreshed just now</span><span>Executive reporting workspace</span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" data-toast role="status" aria-live="polite"></div><script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

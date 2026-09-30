@@ -1,0 +1,7 @@
+<section class="utility-view">
+  <div class="section-heading"><div><h2>Settings</h2><p>Workspace and Synchroteam connection settings</p></div></div>
+  <form class="settings-grid" method="post" action="{{ url_for('save_settings') }}">
+    <article class="utility-card"><div class="utility-card-head"><div><h3>Synchroteam connection</h3><p>Edit API endpoints for future connection changes.</p></div><span class="connection-dot"></span></div><div class="settings-form"><label>Jobs endpoint<input name="SYNCHROTEAM_JOB_URL" type="url" value="{{ config.job_endpoint }}" required></label><label>Customers endpoint<input name="SYNCHROTEAM_CUSTOMER_LIST_URL" type="url" value="{{ config.customer_endpoint }}" required></label><label>Sites endpoint<input name="SYNCHROTEAM_SITE_LIST_URL" type="url" value="{{ config.site_endpoint }}" required></label><div class="settings-auth">Authentication <strong>{{ config.auth_status }}</strong></div><button class="button primary" type="submit">Save endpoint URLs</button></div></article>
+    <article class="utility-card"><div class="utility-card-head"><div><h3>Dashboard defaults</h3><p>Preferences for this workspace</p></div></div><dl class="settings-list"><div><dt>Default period</dt><dd>{{ period }}</dd></div><div><dt>Workspace</dt><dd>Executive view</dd></div><div><dt>Role</dt><dd>Administrator</dd></div></dl></article>
+  </form>
+</section>
