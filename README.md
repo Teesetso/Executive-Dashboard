@@ -2,7 +2,7 @@
 
 A simple Python and Flask dashboard.
 
-![CVTS Operations Dashboard](src/assets/hero.png)
+![CVTS Operations Dashboard]
 
 ## Run locally
 
@@ -38,3 +38,7 @@ python app.py
 You can filter the list to one job by adding a `job_id` query parameter to the dashboard address. The raw response is available from the jobs API route.
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/16a90e03-e79c-48d7-b937-d9c0c3ae3915" />
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/4d6d6887-3786-4b6a-8c68-a558001af562" />
+
+
