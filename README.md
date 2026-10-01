@@ -2,7 +2,7 @@
 
 A simple Python and Flask dashboard.
 
-![CVTS Operations Dashboard]
+CVTS Operations Dashboard
 
 ## Run locally
 
